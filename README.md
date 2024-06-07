@@ -4,7 +4,7 @@ This repository serves as service provider for the [identity provider repository
 
 This is a Laravel project that provides a REST API using OAuth2.0 for the identity provider to consume.
 
-This should be run on port 8000, while the identity provider should be run on port 8001.
+This should run on port 8000, while the identity provider should be run on port 8001.
 
 ## Setup
 
