@@ -14,7 +14,6 @@ class AuthController extends Controller
     {
         $query = http_build_query([
             'client_id' => env('OAUTH_CLIENT_ID'),
-            'redirect_uri' => env('APP_URL').'/callback',
             'response_type' => 'code',
             'scope' => '',
         ]);
