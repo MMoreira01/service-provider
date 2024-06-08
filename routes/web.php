@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -8,8 +10,25 @@ Route::get('/', function () {
 });
 
 Route::get('/redirect', [AuthController::class, 'redirect']);
-Route::get('/callback', [AuthController::class, 'callback']);
+Route::get('/callback', function (Request $request) {
+    dd($request->all());
+    $state = $request->session()->pull('state');
+    throw_unless(
+        strlen($state) > 0 && $state === $request->state,
+        InvalidArgumentException::class,
+        'Invalid state value.'
+    );
 
+    $response = Http::asForm()->post(env('IDP_URL').'/oauth/token', [
+        'grant_type' => 'authorization_code',
+        'client_id' => env('OAUTH_CLIENT_ID'),
+        'client_secret' => env('OAUTH_CLIENT_SECRET'),
+        'redirect_uri' => env('APP_URL').'/callback',
+        'code' => $request->code,
+    ]);
+
+    dd($response->body(), $response->status());
+});
 
 Route::group([
     'as' => 'passport.',
