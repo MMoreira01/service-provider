@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use GuzzleHttp\Client;
+use App\Models\OauthToken;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 class AuthController extends Controller
 {
@@ -27,41 +27,34 @@ class AuthController extends Controller
     }
 
     // Handle the callback from the IdP
-    // public function callback(Request $request)
-    // {
-    //     $http = new Client;
+    public function callback(Request $request)
+    {
+        $state = $request->session()->pull('state');
+        throw_unless(
+            strlen($state) > 0 && $state === $request->state,
+            InvalidArgumentException::class,
+            'Invalid state value.'
+        );
 
-    //     $response = $http->post(env('IDP_URL').'/oauth/token', [
-    //         'form_params' => [
-    //             'grant_type' => 'authorization_code',
-    //             'client_id' => env('OAUTH_CLIENT_ID'),
-    //             'client_secret' => env('OAUTH_CLIENT_SECRET'),
-    //             'redirect_uri' => env('APP_URL').'/callback',
-    //             'code' => $request->code,
-    //         ],
-    //     ]);
-    //     $response = json_decode((string) $response->getBody(), true);
-    //     $accessToken = $response['access_token'];
+        $response = Http::post(env('IDP_URL').'/oauth/token', [
+            'grant_type' => 'authorization_code',
+            'client_id' => env('OAUTH_CLIENT_ID'),
+            'client_secret' => env('OAUTH_CLIENT_SECRET'),
+            'redirect_uri' => env('APP_URL').'/callback',
+            'code' => $request->code,
+        ]);
 
-    //     // Use access token to get user info from IdP
-    //     $response = $http->get(env('IDP_URL').'/api/user', [
-    //         'headers' => [
-    //             'Authorization' => 'Bearer '.$accessToken,
-    //         ],
-    //     ]);
+        $response = $response->json();
 
-    //     $user = json_decode((string) $response->getBody(), true);
+        // Get Auth User from IdP
+        $user = Http::withToken($response['access_token'])->get(env('IDP_URL').'/api/user')->json();
 
-    //     // Create or update the user in SP's database
-    //     $spUser = User::updateOrCreate([
-    //         'email' => $user['email'],
-    //     ], [
-    //         'name' => $user['name'],
-    //     ]);
+        OauthToken::updateOrCreate([
+            'user_id' => $user['id'],
+        ], [
+            'access_token' => $response['access_token'],
+        ]);
 
-    //     // Log the user in
-    //     Auth::login($spUser);
-
-    //     return redirect('/');
-    // }
+        return redirect('/');
+    }
 }
