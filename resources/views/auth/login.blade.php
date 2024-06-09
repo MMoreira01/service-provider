@@ -72,19 +72,6 @@
             background-color: #38b3d7;
         }
 
-        .card a {
-            display: inline-block;
-            margin-top: 1rem;
-            color: #333;
-            text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.3s;
-        }
-
-        .card a:hover {
-            color: #38b3d7;
-        }
-
         .muudle-button {
             background-color: #f98012;
             color: #fff;
@@ -98,6 +85,8 @@
             text-align: center;
             margin-top: 1rem;
             margin-bottom: 1rem;
+            display: block;
+            text-decoration: none;
         }
 
         .muudle-button:hover {
@@ -155,7 +144,7 @@
                 </div>
 
                 <!-- Login with Muudle -->
-                <button type="button" class="muudle-button">
+                <button type="button" class="muudle-button" onclick="window.location.href='/redirect'">
                     {{ __('Login with Muudle') }}
                 </button>
 
