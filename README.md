@@ -4,6 +4,8 @@ This repository serves as service provider that will use the [identity provider 
 
 This should run on port 8001 and the identity provider should run on port 8000.
 
+The Service Provider is a simulated Academic Papers Repository,where the user can login by using the Identity Provider Plataform, in this case the Muudle Plataform. After he authorizes the access, he can navigate freely through the platform, and see the papers that are available.
+
 ## Setup
 
 1. Install dependencies and copy the .env
