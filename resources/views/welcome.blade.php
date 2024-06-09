@@ -42,7 +42,7 @@
         }
 
         .navbar a:hover {
-            background-color: #FF2D20;
+            background-color: #4fd3f8;
             color: #fff;
         }
 
@@ -65,7 +65,7 @@
         }
 
         .hero a {
-            background-color: #FF2D20;
+            background-color: #4fd3f8;
             color: #fff;
             padding: 0.75rem 1.5rem;
             border-radius: 5px;
