@@ -72,7 +72,7 @@
             background-color: #38b3d7;
         }
 
-        .muudle-button {
+        .muudal-button {
             background-color: #f98012;
             color: #fff;
             padding: 0.75rem;
@@ -89,7 +89,7 @@
             text-decoration: none;
         }
 
-        .muudle-button:hover {
+        .muudal-button:hover {
             background-color: #d96e10;
         }
 
@@ -143,9 +143,9 @@
                     @endif
                 </div>
 
-                <!-- Login with Muudle -->
-                <button type="button" class="muudle-button" onclick="window.location.href='/redirect'">
-                    {{ __('Login with Muudle') }}
+                <!-- Login with Muudal -->
+                <button type="button" class="muudal-button" onclick="window.location.href='/redirect'">
+                    {{ __('Login with Muudal') }}
                 </button>
 
                 <!-- Log in Button -->
